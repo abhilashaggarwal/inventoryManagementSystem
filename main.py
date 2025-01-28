@@ -5,19 +5,14 @@ conn = mysql.connector.connect(
     host='localhost',
     user='root',
     password='root',
-    database='product_inventory'
+    database='inventorymanagementsystem'
 )
 
 print("Connected to the database")
 
 
 class Product:
-    def __init__(self,product_name, brand, price, stock, category):
-        self.product_name=product_name
-        self.brand=brand
-        self.price=price
-        self.stock=stock
-        self.category=category
+    def __init__(self):
         self.conn = conn
         self.cursor = conn.cursor()
 
@@ -122,3 +117,11 @@ class Product:
                 case 6:
                     print("Exiting the program. Goodbye!")
                     break
+
+    def __del__(self):
+        self.cursor.close()
+        self.conn.close()
+        print("Database connection closed.")
+
+p1=Product()
+p1.menu()
