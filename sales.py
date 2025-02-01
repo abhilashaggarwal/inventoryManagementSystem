@@ -23,7 +23,7 @@ class turnOver:
         self.conn.commit()
         print("Sale data added successfully!")
 
-    def delete_product(self, product_name, date, customer_name):
+    def delete_sales(self, product_name, date, customer_name):
         query = "DELETE FROM sales_inventory where product_name=%s AND date=%s AND customer_name=%s"
         self.cursor.execute(query, (product_name, date, customer_name))
         self.conn.commit()
@@ -41,7 +41,7 @@ class turnOver:
         self.conn.commit()
         print(f"Price updation for {customer_name} successfully!")
 
-    def generate_report(self,category,brand,product_name):
+    def generate_report(self,customer_name,date1,date2,product_name): 
 
             print("1. Based on Date Range")
             print("2. Based on Customer Name")
@@ -57,12 +57,12 @@ class turnOver:
 
             match value:
                 case 1:
-                    query = "SELECT * FROM sales_inventory where category=%s"
-                    df_category = pd.read_sql(query, self.conn, params=(category,))
-                    print(df_category)
+                    query = "SELECT * FROM sales_inventory where date1 > %s AND date2 < %s"
+                    df_dateRange = pd.read_sql(query, self.conn, params=(date1,date2))
+                    print(df_dateRange)
                 case 2:
-                    query = "SELECT * FROM sales_inventory where brand=%s"
-                    df_brand = pd.read_sql(query, self.conn, params=(brand,))
+                    query = "SELECT * FROM sales_inventory where customer_name=%s"
+                    df_brand = pd.read_sql(query, self.conn, params=(customer_name,))
                     print(df_brand)
                 case 3:
                     query = "SELECT * FROM sales_inventory where product_name=%s"
@@ -89,31 +89,33 @@ class turnOver:
                     print("Please enter a valid input from 1-6")
             match value:
                 case 1:
-                    product_name = input("Enter product name: ")
-                    brand = input("Enter brand: ")
-                    price = float(input("Enter price: "))
-                    stock = int(input("Enter stock: "))
-                    category = input("Enter category: ")
-                    self.add_product(product_name, brand, price, stock, category)
+                    product_name = input("Enter Product Name: ")   #product_name, quantity, date, sales_price, customer_name
+                    quantity = input("Enter Quantity: ")
+                    date = input("Enter Date: ")
+                    sales_price = int(input("Enter Sales Price of product: "))
+                    customer_name = input("Enter Customer Name: ")
+                    self.add_product(product_name, quantity, date, sales_price, customer_name)
                 case 2:
                     product_name = input("Enter product name to delete: ")
-                    brand = input("Enter brand: ")
-                    self.delete_product(product_name, brand)
+                    date = input("Enter Date: ")
+                    customer_name = input("Enter Customer Name: ")
+                    self.delete_product(product_name, date, customer_name)
                 case 3:
-                    product_name = input("Enter product name: ")
-                    brand = input("Enter brand: ")
-                    stock = int(input("Enter new stock: "))
-                    self.update_stock(product_name, brand, stock)
+                    quantity = input("Enter Quantity: ")
+                    date = input("Enter Date: ")
+                    customer_name = input("Enter Customer Name: ")
+                    self.update_stock(customer_name, date, quantity)
                 case 4:
-                    product_name = input("Enter product name: ")
-                    brand = input("Enter brand: ")
+                    date = input("Enter Date: ")
+                    customer_name = input("Enter Customer Name: ")
                     price = float(input("Enter new price: "))
-                    self.update_price(product_name, brand, price)
+                    self.update_price(customer_name, date, price)
                 case 5:
-                    category = input("Enter category (or leave blank): ") or None
-                    brand = input("Enter brand (or leave blank): ") or None
-                    product_name = input("Enter product name (or leave blank): ") or None
-                    self.generate_report(category, brand, product_name)
+                    product_name = input("Enter Product name (or leave blank): ") or None
+                    date1 = input("Enter Date1: ")
+                    date2 = input("Enter Date2: ")
+                    customer_name = input("Enter Customer name (or leave blank): ") or None
+                    self.generate_report(product_name, date1, date2, customer_name)
                 case 6:
                     print("Exiting the program. Goodbye!")
                     break
@@ -123,5 +125,5 @@ class turnOver:
         self.conn.close()
         print("Database connection closed.")
 
-p1=Product()
+p1=turnOver()
 p1.menu()
