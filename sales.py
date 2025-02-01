@@ -1,20 +1,10 @@
-import mysql.connector
 import pandas as pd
+from database_connect import engine, db_connection
 
-conn = mysql.connector.connect(
-    host='localhost',
-    user='root',
-    password='root',
-    database='inventorymanagementsystem'
-)
-
-print("Connected to the database")
-
-
-class turnOver:
+class Sales:
     def __init__(self):
-        self.conn = conn
-        self.cursor = conn.cursor()
+        self.conn = db_connection
+        self.cursor = self.conn.cursor()
 
 
     def add_sales(self,product_name, quantity, date, sales_price, customer_name):
@@ -58,15 +48,15 @@ class turnOver:
             match value:
                 case 1:
                     query = "SELECT * FROM sales_inventory where date1 > %s AND date2 < %s"
-                    df_dateRange = pd.read_sql(query, self.conn, params=(date1,date2))
+                    df_dateRange = pd.read_sql(query, engine, self.conn, params=(date1,date2))
                     print(df_dateRange)
                 case 2:
                     query = "SELECT * FROM sales_inventory where customer_name=%s"
-                    df_brand = pd.read_sql(query, self.conn, params=(customer_name,))
+                    df_brand = pd.read_sql(query, engine, self.conn, params=(customer_name,))
                     print(df_brand)
                 case 3:
                     query = "SELECT * FROM sales_inventory where product_name=%s"
-                    df_product = pd.read_sql(query, self.conn,params=(product_name,))
+                    df_product = pd.read_sql(query, engine, self.conn,params=(product_name,))
                     print(df_product)
 
 
@@ -124,6 +114,3 @@ class turnOver:
         self.cursor.close()
         self.conn.close()
         print("Database connection closed.")
-
-p1=turnOver()
-p1.menu()
