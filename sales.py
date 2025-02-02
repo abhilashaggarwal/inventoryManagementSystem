@@ -1,11 +1,10 @@
 import pandas as pd
 from database_connect import engine, db_connection
 
-class Sales:
+class turnOver:
     def __init__(self):
-        self.conn = db_connection
+        self.conn = db_connection()
         self.cursor = self.conn.cursor()
-
 
     def add_sales(self,product_name, quantity, date, sales_price, customer_name):
         query = "INSERT INTO sales_inventory (product_name, quantity, date, sales_price, customer_name) VALUES (%s, %s, %s, %s, %s)"
@@ -67,7 +66,7 @@ class Sales:
             print("3. Update Quantity")
             print("4. Update Pricing")
             print("5. Generate Report")
-            print("6. Exit")
+            print("6. Back to Main Menu")
         
             while True:
                 try:
@@ -107,7 +106,7 @@ class Sales:
                     customer_name = input("Enter Customer name (or leave blank): ") or None
                     self.generate_report(product_name, date1, date2, customer_name)
                 case 6:
-                    print("Exiting the program. Goodbye!")
+                    print("Back to Main Menu!")
                     break
 
     def __del__(self):

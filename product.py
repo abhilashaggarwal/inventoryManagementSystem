@@ -66,7 +66,7 @@ class Product:
             print("3. Update Stock")
             print("4. Update Price")
             print("5. Generate Report")
-            print("6. Exit")
+            print("6. Back to Main Menu")
         
             while True:
                 try:
@@ -104,7 +104,7 @@ class Product:
                     product_name = input("Enter product name (or leave blank): ") or None
                     self.generate_report(category, brand, product_name)
                 case 6:
-                    print("Exiting the program. Goodbye!")
+                    print("Back to Main Menu!")
                     break
 
     def __del__(self):
